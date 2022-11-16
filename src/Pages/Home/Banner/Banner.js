@@ -9,7 +9,7 @@ const Banner = () => {
                 <img src={chair} className="rounded-lg lg:w-1/2 shadow-2xl" alt='' />
                 <div>
                     <h1 className="text-5xl font-bold">Box Office News!</h1>
-                    <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
+                    <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id jkos.</p>
                     <PrimaryButton>Getting Started</PrimaryButton>
                 </div>
             </div>
