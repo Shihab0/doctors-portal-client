@@ -1,7 +1,8 @@
-import { async } from "@firebase/util";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import Loader from "../../Shared/Loader/Loader";
 
 const AddDoctor = () => {
@@ -10,6 +11,9 @@ const AddDoctor = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
+
+  const imgHostKey = process.env.REACT_APP_imgbb_key;
+  //   console.log(imgHostKey);
 
   const { data: specialties = [], isLoading } = useQuery({
     queryKey: ["specialty"],
@@ -20,8 +24,46 @@ const AddDoctor = () => {
     },
   });
 
+  const navigate = useNavigate();
+
   const handleAddDoctor = (data) => {
-    console.log(data);
+    console.log(data.image[0]);
+    const image = data.image[0];
+    const formData = new FormData();
+    formData.append("image", image);
+
+    fetch(`https://api.imgbb.com/1/upload?key=${imgHostKey}`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((imgData) => {
+        console.log(imgData);
+        if (imgData.success) {
+          console.log(imgData.data.url);
+          const doctor = {
+            name: data.name,
+            email: data.email,
+            specialty: data.specialty,
+            image: imgData.data.url,
+          };
+          /////////Save doctor information
+          fetch("http://localhost:5000/doctors", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              authorization: `bearer ${localStorage.getItem("accessToken")}`,
+            },
+            body: JSON.stringify(doctor),
+          })
+            .then((res) => res.json())
+            .then((result) => {
+              console.log(result);
+              toast.success(`${data.name} is added successfully`);
+              navigate("/dashboard/manageDoctors");
+            });
+        }
+      });
   };
 
   if (isLoading) {
@@ -71,7 +113,7 @@ const AddDoctor = () => {
               <span className="label-text">Specialty</span>
             </label>
             <select
-              {...register("specialties")}
+              {...register("specialty")}
               className="select select-bordered w-full max-w-xs"
             >
               <option disabled selected>
@@ -90,7 +132,7 @@ const AddDoctor = () => {
               </label>
               <input
                 type="file"
-                {...register("img", {
+                {...register("image", {
                   required: "Email Address is required",
                 })}
                 className="input input-bordered w-full max-w-xs"
