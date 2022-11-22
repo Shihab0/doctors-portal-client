@@ -49,7 +49,7 @@ const SignUp = () => {
         name,
         email,
       };
-      fetch("http://localhost:5000/users", {
+      fetch("https://doctors-portal-server-bice-five.vercel.app/users", {
         method: "POST",
         headers: {
           "content-type": "application/json",

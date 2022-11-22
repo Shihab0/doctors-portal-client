@@ -18,9 +18,9 @@ const AvailableAppointments = ({ selectedDate }) => {
   } = useQuery({
     queryKey: ["appointmentOptions", date],
     queryFn: () =>
-      fetch(`http://localhost:5000/appointmentOption?date=${date}`).then(
-        (res) => res.json()
-      ),
+      fetch(
+        `https://doctors-portal-server-bice-five.vercel.app/appointmentOption?date=${date}`
+      ).then((res) => res.json()),
   });
 
   if (isLoading) {
@@ -28,7 +28,7 @@ const AvailableAppointments = ({ selectedDate }) => {
   }
 
   //   useEffect(() => {
-  //     fetch("http://localhost:5000/appointmentOption")
+  //     fetch("https://doctors-portal-server-bice-five.vercel.app/appointmentOption")
   //       .then((res) => res.json())
   //       .then((data) => setAppointmentOptions(data));
   //   }, []);
